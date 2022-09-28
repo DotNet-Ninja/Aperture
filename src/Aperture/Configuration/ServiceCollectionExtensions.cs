@@ -1,0 +1,54 @@
+﻿using Aperture.Services;
+using DotNetNinja.AutoBoundConfiguration;
+using Microsoft.EntityFrameworkCore;
+
+namespace Aperture.Configuration;
+
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    {
+        return services
+                .AddSingleton<ITimeProvider, DefaultTimeProvider>();
+    }
+
+    public static IServiceCollection AddAutoBoundConfigurations
+        (this IServiceCollection services, IConfiguration configuration, out IAutoBoundConfigurationProvider provider)
+    {
+        provider = services.AddAutoBoundConfigurations(configuration).FromAssemblyOf<StartUp>().Provider;
+        return services;
+    }
+
+    public static IServiceCollection AddDataContext<TContext>(this IServiceCollection services,
+        IAutoBoundConfigurationProvider provider, string? connectionName = null) where TContext : DbContext
+    {
+        if (string.IsNullOrWhiteSpace(connectionName))
+        {
+            connectionName = typeof(TContext).Name;
+        }
+
+        var settings = provider.Get<DbSettings>();
+        return services
+            .AddDbContext<TContext>(options => options.UseSqlServer(settings.Contexts[connectionName].ConnectionString))
+            //.AddScoped<IDbMigrator, SqlDbMigrator>()
+            ;
+    }
+
+    public static IServiceCollection AddApplicationHealthChecks(this IServiceCollection services, IAutoBoundConfigurationProvider provider)
+    {
+        var dbSettings = provider.Get<DbSettings>();
+        var checks = services.AddHealthChecks();
+        foreach (var db in dbSettings.Contexts)
+        {
+            checks = checks.AddSqlServer(db.Value.ConnectionString, name: db.Value.Name, tags: new[]
+            {
+                "Database",
+                "SqlServer"
+            });
+        }
+
+        return checks.Services;
+    }
+
+
+}
