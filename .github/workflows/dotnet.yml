@@ -17,6 +17,8 @@ jobs:
       run: dotnet build --no-restore --configuration Release
     - name: Execute Tests & Collect Coverage
       run: dotnet test -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./coverage/lcov.info --no-build
+    - name: Diagnostics
+      run: ls -laR
     - name: Publish to Coveralls
       uses: coverallsapp/github-action@master
       with:
