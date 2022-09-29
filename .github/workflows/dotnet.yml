@@ -3,7 +3,7 @@ on:
   push:
     branches: [ "main" ]
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -13,7 +13,12 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Build Source
+      run: dotnet build --no-restore --configuration Release
+    - name: Execute Tests & Collect Coverage
+      run: dotnet test -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./coverage/lcov.info --no-build
+    - name: Publish to Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        path-to-lcov: tests/Aperture.Tests/coverage/lcov.info
+        github-token: ${{ secrets.GITHUB_TOKEN }}  

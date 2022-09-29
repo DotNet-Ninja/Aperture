@@ -19,14 +19,16 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddDataContext<TContext>(this IServiceCollection services,
-        IAutoBoundConfigurationProvider provider, string? connectionName = null) where TContext : DbContext
+    public static IServiceCollection AddDatabaseContext<TContext>(this IServiceCollection services, IAutoBoundConfigurationProvider provider) 
+            where TContext : DbContext
     {
-        if (string.IsNullOrWhiteSpace(connectionName))
-        {
-            connectionName = typeof(TContext).Name;
-        }
+        string connectionName = typeof(TContext).Name;
+        return services.AddDataContext<TContext>(provider, connectionName);
+    }
 
+    public static IServiceCollection AddDataContext<TContext>(this IServiceCollection services,
+        IAutoBoundConfigurationProvider provider, string connectionName) where TContext : DbContext
+    {
         var settings = provider.Get<DbSettings>();
         return services
             .AddDbContext<TContext>(options => options.UseSqlServer(settings.Contexts[connectionName].ConnectionString))
