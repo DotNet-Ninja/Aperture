@@ -1,4 +1,5 @@
 ﻿using Aperture.Services;
+using Auth0.AspNetCore.Authentication;
 using DotNetNinja.AutoBoundConfiguration;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,5 +53,20 @@ public static class ServiceCollectionExtensions
         return checks.Services;
     }
 
+    public static IServiceCollection AddAuthentication(this IServiceCollection services, IAutoBoundConfigurationProvider provider)
+    {
+        var settings = provider.Get<AuthenticationSettings>();
+        services.Configure<CookiePolicyOptions>(options =>
+        {
+            options.MinimumSameSitePolicy = SameSiteMode.None;
+        });
+
+       services.AddAuth0WebAppAuthentication(options => 
+       {
+                options.Domain = settings.Domain;
+                options.ClientId = settings.ClientId;
+       });
+       return services;
+    }
 
 }

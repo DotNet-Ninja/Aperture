@@ -7,7 +7,7 @@ public class TagHelperOutputBuilder
 {
     public TagHelperOutputBuilder()
     {
-        _getChildContentAsync = (_, encoder) =>
+        _getChildContentAsync = (_, _) =>
         {
             var tagHelperContent = new DefaultTagHelperContent();
             tagHelperContent.SetHtmlContent(string.Empty);

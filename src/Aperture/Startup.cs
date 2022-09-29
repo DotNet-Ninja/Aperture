@@ -17,6 +17,7 @@ public class StartUp
             //.AddAuthConfiguration(settings)
             
             .AddApplicationHealthChecks(settings)
+            .AddAuthentication(settings)
             .AddApplicationServices()
             .AddControllersWithViews();
     }
