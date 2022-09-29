@@ -9,14 +9,14 @@ namespace Aperture.Tests.TagHelpers;
 
 public class CopyrightTagHelperTests: TagHelperTest
 {
-    private SiteSettingsBuilder _settingsBuilder = new SiteSettingsBuilder();
+    private readonly SiteSettingsBuilder _settingsBuilder = new SiteSettingsBuilder();
 
-    const int year = SiteSettingsBuilder.DefaultStartYear;
+    private static readonly int Year = SiteSettingsBuilder.DefaultStartYear;
     
     [Fact]
     public void Process_ShouldReturnValueEndingWithConfiguredNotice()
     {
-        var mockTime = ConfigureMockTimeProvider(year, 1, 1);
+        var mockTime = ConfigureMockTimeProvider(Year, 1, 1);
         SiteSettings settings = _settingsBuilder;
         TagHelperContext context = ContextBuilder.WithId("id");
         TagHelperOutput output = OutputBuilder.WithTagName("copyright");
@@ -31,8 +31,8 @@ public class CopyrightTagHelperTests: TagHelperTest
     [Fact]
     public void Process_WhenStartYearIsCurrentYear_ShouldReturnValueStartingWithCopyrightAndYear()
     {
-        var expected = $"&copy; {year}";
-        var mockTime = ConfigureMockTimeProvider(year, 1, 1);
+        var expected = $"&copy; {Year}";
+        var mockTime = ConfigureMockTimeProvider(Year, 1, 1);
         SiteSettings settings = _settingsBuilder;
         TagHelperContext context = ContextBuilder.WithId("id");
         TagHelperOutput output = OutputBuilder.WithTagName("copyright");
@@ -47,9 +47,9 @@ public class CopyrightTagHelperTests: TagHelperTest
     [Fact]
     public void Process_WhenStartYearIsLessThanCurrentYear_ShouldReturnValueStartingWithCopyrightAndYearRange()
     {
-        var mockTime = ConfigureMockTimeProvider(year + 1, 1, 1);
+        var mockTime = ConfigureMockTimeProvider(Year + 1, 1, 1);
         SiteSettings settings = _settingsBuilder;
-        var expected = $"&copy; {settings.Copyright.StartYear} - {year+1}";
+        var expected = $"&copy; {settings.Copyright.StartYear} - {Year+1}";
         TagHelperContext context = ContextBuilder.WithId("id");
         TagHelperOutput output = OutputBuilder.WithTagName("copyright");
         var copyrightTagHelper = new CopyrightTagHelper(settings, mockTime.Object);
@@ -63,9 +63,9 @@ public class CopyrightTagHelperTests: TagHelperTest
     [Fact]
     public void Process_WhenStartYearIsGreaterThanCurrentYear_ShouldReturnValueStartingWithCopyrightAndCurrentYear()
     {
-        var mockTime = ConfigureMockTimeProvider(year - 1, 1, 1);
+        var mockTime = ConfigureMockTimeProvider(Year - 1, 1, 1);
         SiteSettings settings = _settingsBuilder;
-        var expected = $"&copy; {year-1}";
+        var expected = $"&copy; {Year-1}";
         TagHelperContext context = ContextBuilder.WithId("id");
         TagHelperOutput output = OutputBuilder.WithTagName("copyright");
         var copyrightTagHelper = new CopyrightTagHelper(settings, mockTime.Object);

@@ -1,49 +1,50 @@
 @import url('/lib/bootstrap-icons/font/bootstrap-icons.min.css');
 
 html {
-    font-size: 14px;
-    position: relative;
-    min-height: 100%;
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
+  html {
+    font-size: 16px;
+  }
 }
 
 body {
-    margin-top: 80px;
-    margin-bottom: 20px;
+  margin-top: 80px;
+  margin-bottom: 20px;
 }
 
 .main-content {
-    min-height: 400px;
+  min-height: 400px;
 }
 
 .denied {
-    font-size: 10em;
+  font-size: 10em;
 }
 
 .big {
-    font-size: 6em;
+  font-size: 6em;
 }
 
 .no-bullets {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 .status-code {
-    text-shadow: 8px 8px 6px rgba(0, 0, 0, 0.7);
+  text-shadow: 8px 8px 6px rgba(0, 0, 0, 0.7);
 }
 
 .skew {
-    transform: rotate(-8deg);
+  transform: rotate(-8deg);
 }
 
 .error-link {
+  color: #990000;
 }
 
 .navbar.fixed-top {
-    border-bottom: 4px solid #0066ff;
+  border-bottom: 4px solid #0066ff;
 }

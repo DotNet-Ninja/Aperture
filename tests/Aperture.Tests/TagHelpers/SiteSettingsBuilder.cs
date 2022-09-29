@@ -4,9 +4,9 @@ namespace Aperture.Tests.TagHelpers;
 
 public class SiteSettingsBuilder
 {
-    public const string DefaultBlogName = "PhotoBlogger";
-    public const int DefaultStartYear = 2022;
-    public const string DefaultCopyrightNotice = "All rights reserved.";
+    public static readonly string DefaultBlogName = "Aperture";
+    public static readonly int DefaultStartYear = 2022;
+    public static readonly string DefaultCopyrightNotice = "All rights reserved.";
 
     private string _blogName = DefaultBlogName;
     private readonly CopyrightSettings _copyright = new ()
@@ -35,7 +35,7 @@ public class SiteSettingsBuilder
 
     public SiteSettings Build()
     {
-        return new SiteSettings()
+        return new SiteSettings
         {
             Copyright = _copyright,
             Name = _blogName

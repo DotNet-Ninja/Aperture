@@ -7,7 +7,7 @@ public class TagHelperOutputBuilder
 {
     public TagHelperOutputBuilder()
     {
-        _getChildContentAsync = (b, encoder) =>
+        _getChildContentAsync = (_, encoder) =>
         {
             var tagHelperContent = new DefaultTagHelperContent();
             tagHelperContent.SetHtmlContent(string.Empty);
@@ -16,7 +16,7 @@ public class TagHelperOutputBuilder
 
     }
 
-    public const string DefaultTagName = "test";
+    public static readonly string DefaultTagName = "test";
     private string _tagName = DefaultTagName;
     private TagHelperAttributeList _attributes= new ();
 

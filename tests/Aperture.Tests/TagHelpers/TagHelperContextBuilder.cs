@@ -4,7 +4,7 @@ namespace Aperture.Tests.TagHelpers;
 
 public class TagHelperContextBuilder
 {
-    public const string DefaultTagId = "TagId";
+    public static readonly string DefaultTagId = "TagId";
 
     private TagHelperAttributeList _attributes = new ();
     private Dictionary<object, object> _items = new ();
