@@ -1,4 +1,9 @@
-﻿<!-- Navigation -->            
+﻿@{
+    var isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+    var userName = (isAuthenticated) ? User?.Identity?.Name ?? "Mystery" : "Anonymous";
+    var displayName = (User?.IsInRole(Role.Administrator)??false) ? $"{userName} (Admin)" : userName;
+}
+<!-- Navigation -->            
             <nav class="navbar navbar-expand-sm fixed-top navbar-light bg-white mb-3">
                 <div class="container">
                     <a class="navbar-brand fs-2" asp-area="" asp-controller="Home" asp-action="Index">
@@ -17,6 +22,28 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Gallery" asp-action="Index">Galleries</a>
                             </li>
+                            @if (!isAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Account" asp-action="LogIn"><i class="bi bi-box-arrow-in-right"></i></a>
+                                </li> 
+                            }
+                            else
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
+                                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        @displayName
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Account" asp-action="LogOut">
+                                                <i class="bi bi-box-arrow-right"></i> Sign Out
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>

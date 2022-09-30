@@ -1,6 +1,7 @@
 ﻿using Aperture.Services;
 using Auth0.AspNetCore.Authentication;
 using DotNetNinja.AutoBoundConfiguration;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aperture.Configuration;
