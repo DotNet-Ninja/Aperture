@@ -1,4 +1,5 @@
-﻿using Auth0.AspNetCore.Authentication;
+﻿using Aperture.Services;
+using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -8,10 +9,12 @@ namespace Aperture.Controllers;
 public class AccountController : MvcController
 {
     private readonly IWebHostEnvironment _environment;
+    private readonly ISignInService _signInService;
 
-    public AccountController(ILogger<AccountController> logger, IWebHostEnvironment environment) : base(logger)
+    public AccountController(ILogger<AccountController> logger, IWebHostEnvironment environment, ISignInService signInService) : base(logger)
     {
         _environment = environment;
+        _signInService = signInService;
     }
 
     [HttpGet]
@@ -21,7 +24,7 @@ public class AccountController : MvcController
             .WithRedirectUri(returnUrl)
             .Build();
 
-        await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+        await _signInService.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
     }
     
     [HttpGet, Authorize]
@@ -37,13 +40,12 @@ public class AccountController : MvcController
     [HttpGet, Authorize]
     public async Task LogOut()
     {
-        var redirect = Url.Action("Index", "Home") ?? "/";
         var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
-            .WithRedirectUri(redirect)
+            .WithRedirectUri("/")
             .Build();
 
-        await HttpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        await _signInService.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+        await _signInService.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     }
 
 }

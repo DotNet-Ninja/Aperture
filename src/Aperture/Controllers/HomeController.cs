@@ -9,7 +9,7 @@ public class HomeController : MvcController
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public ViewResult Index()
     {
         return View();
     }

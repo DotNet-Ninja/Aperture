@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
     {
         return services
             .AddHttpContextAccessor()
+            .AddTransient<ISignInService, SignInService>()
             .AddSingleton<ITimeProvider, DefaultTimeProvider>();
     }
 
