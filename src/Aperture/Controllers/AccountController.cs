@@ -27,7 +27,10 @@ public class AccountController : MvcController
     [HttpGet, Authorize]
     public IActionResult Diagnostics()
     {
-        if (!_environment.IsDevelopment()) return NotFound();
+        if (!_environment.IsDevelopment())
+        {
+            return NotFound();
+        }
         return View(User.Claims);
     }
 
