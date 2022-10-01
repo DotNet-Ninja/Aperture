@@ -8,7 +8,7 @@ namespace Aperture.Tests.Controllers;
 
 public class ErrorControllerTests
 {
-    private Mock<ILogger<ErrorController>> _mockLogger = new();
+    private readonly Mock<ILogger<ErrorController>> _mockLogger = new();
 
     [Fact]
     public void ServerError_ShouldReturnExpectedView()

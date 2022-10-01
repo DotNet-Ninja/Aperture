@@ -1,9 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 
 namespace Aperture.Services;
 
-[ExcludeFromCodeCoverage] // Simple Wrapper
 public class SignInService : ISignInService
 {
     private readonly HttpContext _context;
