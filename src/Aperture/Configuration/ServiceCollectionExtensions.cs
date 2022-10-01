@@ -1,7 +1,6 @@
 ﻿using Aperture.Services;
 using Auth0.AspNetCore.Authentication;
 using DotNetNinja.AutoBoundConfiguration;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aperture.Configuration;
@@ -11,7 +10,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         return services
-                .AddSingleton<ITimeProvider, DefaultTimeProvider>();
+            .AddHttpContextAccessor()
+            .AddSingleton<ITimeProvider, DefaultTimeProvider>();
     }
 
     public static IServiceCollection AddAutoBoundConfigurations
