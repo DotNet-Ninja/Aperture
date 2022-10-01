@@ -6,8 +6,8 @@ public static class WellKnownEndpoint
     public static readonly string ApplicationRoot = "~/";
     public static readonly string AbsoluteRoot = "/";
     public static readonly string AuthCallback = "/signin-oidc";
-    public static readonly string SignIn = "/Account/SignIn";
-    public static readonly string SignOut = "/Account/SignOut";
+    public static readonly string SignIn = "/Account/LogIn";
+    public static readonly string SignOut = "/Account/LogOut";
     public static readonly string SignOutRedirectUrl = ApplicationRoot;
     public static readonly string AccessDenied = "/Error/AccessDenied";
 
