@@ -1,6 +1,8 @@
 ﻿namespace Aperture.Constants;
 
-public class Orientation
+public enum Orientation
 {
-    
+    Landscape,
+    Portrait,
+    Square
 }

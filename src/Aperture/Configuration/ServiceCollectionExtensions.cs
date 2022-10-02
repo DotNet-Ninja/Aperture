@@ -1,4 +1,6 @@
-﻿using Aperture.Services;
+﻿using Aperture.Entities;
+using Aperture.Entities.Migrations;
+using Aperture.Services;
 using Auth0.AspNetCore.Authentication;
 using DotNetNinja.AutoBoundConfiguration;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ public static class ServiceCollectionExtensions
         return services
             .AddHttpContextAccessor()
             .AddTransient<ISignInService, SignInService>()
+            .AddScoped<IDbMigrator<ApertureDb>, SqlDbMigrator<ApertureDb>>()
             .AddSingleton<ITimeProvider, DefaultTimeProvider>();
     }
 
@@ -22,7 +25,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddDatabaseContext<TContext>(this IServiceCollection services, IAutoBoundConfigurationProvider provider) 
+    public static IServiceCollection AddDataContext<TContext>(this IServiceCollection services, IAutoBoundConfigurationProvider provider) 
             where TContext : DbContext
     {
         string connectionName = typeof(TContext).Name;

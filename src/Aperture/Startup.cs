@@ -1,4 +1,6 @@
 ﻿using Aperture.Configuration;
+using Aperture.Entities;
+using Aperture.Entities.Migrations;
 
 namespace Aperture;
 
@@ -14,15 +16,14 @@ public class StartUp
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddAutoBoundConfigurations(Configuration, out var settings)
-            //.AddAuthConfiguration(settings)
-            
+            .AddDataContext<ApertureDb>(settings)
             .AddApplicationHealthChecks(settings)
             .AddAuthentication(settings)
             .AddApplicationServices()
             .AddControllersWithViews();
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbMigrator<ApertureDb> migrator)
     {
         app.UseStrictTransportSecurity(env)
             .UseGlobalExceptionHandler(env)
@@ -32,5 +33,7 @@ public class StartUp
             .UseAuthentication()
             .UseAuthorization()
             .UseApplicationEndpoints();
+
+        migrator.Migrate().SeedData();
     }
 }
