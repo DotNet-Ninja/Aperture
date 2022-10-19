@@ -1,0 +1,22 @@
+﻿@model PreviousNextPagerViewModel
+
+@if (Model.HasData)
+{
+    <nav aria-label="Pager" class="mt-5">
+        <div class="pagination justify-content-center mb-2">@Model.Caption</div>
+        <ul class="pagination justify-content-center">
+            @if (Model.CanGoBack)
+            {
+                <li class="@Model.PreviousClass">
+                    <a class="page-link text-bg-dark" href="@Model.PreviousUrl"><i class="bi bi-caret-left-fill"></i> Back</a>
+                </li>
+            }
+            @if (Model.CanGoForward)
+            {
+                <li class="@Model.NextClass">
+                    <a class="page-link text-bg-dark" href="@Model.NextUrl">Next <i class="bi bi-caret-right-fill"></i></a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

@@ -25,6 +25,11 @@ public abstract class MvcController : Controller
         return result;
     }
 
+    protected ViewResult NotFoundView()
+    {
+        return ViewWithStatus(HttpStatus.NotFound, "~/Views/Error/NotFound.cshtml");
+    }
+
     protected ViewResult InternalServerErrorView()
     {
         return ViewWithStatus(HttpStatus.InternalServerError, "~/Views/Error/ServerError.cshtml");

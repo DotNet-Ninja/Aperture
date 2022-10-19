@@ -28,8 +28,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\EntityTypeConfigurations\" />
-    <Folder Include="wwwroot\images\samples\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="ViewComponents\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Shared\Components\PreviousNextPager\Default.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Shared\Components\PreviousNextPager\Default.cshtml" />
   </ItemGroup>
 
 </Project>

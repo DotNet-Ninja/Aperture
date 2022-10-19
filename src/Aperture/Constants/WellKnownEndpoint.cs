@@ -10,6 +10,7 @@ public static class WellKnownEndpoint
     public static readonly string SignOut = "/Account/LogOut";
     public static readonly string SignOutRedirectUrl = ApplicationRoot;
     public static readonly string AccessDenied = "/Error/AccessDenied";
+    public static readonly string DefaultAvatar = "/images/default.avatar.png";
 
     public static class HealthChecks
     {

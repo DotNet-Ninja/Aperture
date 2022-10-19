@@ -1,6 +1,7 @@
 ﻿using Aperture.Entities;
 using Aperture.Entities.Migrations;
 using Aperture.Services;
+using Aperture.Services.Collectors;
 using Auth0.AspNetCore.Authentication;
 using DotNetNinja.AutoBoundConfiguration;
 using Microsoft.EntityFrameworkCore;
@@ -14,8 +15,11 @@ public static class ServiceCollectionExtensions
         return services
             .AddHttpContextAccessor()
             .AddTransient<ISignInService, SignInService>()
-            .AddScoped<IDbMigrator<ApertureDb>, SqlDbMigrator<ApertureDb>>()
-            .AddSingleton<ITimeProvider, DefaultTimeProvider>();
+            .AddSingleton<IStorageProvider, AzureStorageProvider>()
+            .AddScoped<ITimeProvider, DefaultTimeProvider>()
+            .AddScoped<IExifToMetadataConverter, ExifToMetadataConverter>()
+            .AddMetadataCollectors()
+            .AddScoped<IPhotoService, PhotoService>();
     }
 
     public static IServiceCollection AddAutoBoundConfigurations
@@ -38,8 +42,7 @@ public static class ServiceCollectionExtensions
         var settings = provider.Get<DbSettings>();
         return services
             .AddDbContext<TContext>(options => options.UseSqlServer(settings.Contexts[connectionName].ConnectionString))
-            //.AddScoped<IDbMigrator, SqlDbMigrator>()
-            ;
+            .AddScoped<IDbMigrator<ApertureDb>, SqlDbMigrator<ApertureDb>>();
     }
 
     public static IServiceCollection AddApplicationHealthChecks(this IServiceCollection services, IAutoBoundConfigurationProvider provider)
@@ -74,4 +77,14 @@ public static class ServiceCollectionExtensions
        return services;
     }
 
+    private static IServiceCollection AddMetadataCollectors(this IServiceCollection services)
+    {
+        var collectorTypes = typeof(StartUp).Assembly.GetTypes()
+            .Where(t => t.IsPublic && !t.IsAbstract && t.GetInterface(nameof(IMetadataCollector)) != null);
+        foreach (var type in collectorTypes)
+        {
+            services.AddScoped(typeof(IMetadataCollector), type);
+        }
+        return services;
+    }
 }

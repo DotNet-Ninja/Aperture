@@ -1,0 +1,64 @@
+﻿@model LibraryViewModel
+@{
+    ViewData[ViewKey.Title] = "Library";
+}
+<div class="row mb-2">
+    <h2>Library</h2>
+</div>
+<div class="row">
+    <form asp-controller="Library" asp-action="Index" id="search-form" method="get">
+        <div class="input-group mb-3">
+            <input asp-for="SearchQuery" type="text" class="form-control" placeholder="Search Titles & Tags"
+                   aria-label="Search" aria-describedby="search-button">
+            <button class="btn btn-primary" type="submit" id="search-button" title="Search"><i class="bi bi-search"></i></button>
+            <a href="#" class="btn btn-primary" id="clear-search" title="Clear"><i class="bi bi-x-circle"></i></a>
+            <a asp-controller="Library" asp-action="Add" class="btn btn-primary" title="Add Photo"><i class="bi bi-plus-circle"></i></a>
+        </div>
+    </form>
+</div>
+@if (Model.ItemCount > 0)
+{
+    <div class="row">
+        @foreach (var photo in Model.Items)
+        {
+            <div class="col-xl-2 col-md-3 col-sm-6 mb-3">
+                <a asp-controller="Library" asp-action="Edit" asp-route-id="@photo.Slug" class="card-button mx-auto">
+                    <div class="card text-bg-secondary">
+                        <img src="@photo.ThumbnailUrl" class="card-img-top" alt="@photo.Title">
+                        <div class="card-body text-bg-primary align-content-center text-truncate">
+                            <span class="card-title">@photo.Title</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <vc:previous-next-pager page="@Model" />
+        </div>
+    </div>
+}
+else if(!string.IsNullOrWhiteSpace(Model.SearchQuery))
+{
+    <div class="row">
+        <div class="col">
+            No items found matching the search '@Model.SearchQuery'.  
+            <a asp-controller="Library" asp-action="Index" class="btn btn-secondary ms-3">Clear Search</a>
+        </div>
+    </div>
+}
+
+
+@section Scripts
+{
+    <script type="text/javascript" language="javascript">
+        (function() {
+            $("#clear-search").click(function() {
+                $("#SearchQuery").val("");
+                $("#search-form").submit();
+            });
+            $("#SearchQuery").focus();
+        })();
+    </script>
+}

@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Protocols;
 using Moq;
 
 namespace Aperture.Tests.Controllers;

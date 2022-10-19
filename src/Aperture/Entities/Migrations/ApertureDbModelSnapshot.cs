@@ -22,47 +22,6 @@ namespace Aperture.Entities.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Aperture.Entities.ExifProperty", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("DisplayValue")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<int?>("PhotoId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.HasKey("Id")
-                        .HasName("PK_ExifProperties");
-
-                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"));
-
-                    b.HasIndex("PhotoId");
-
-                    b.ToTable("ExifProperties");
-                });
-
             modelBuilder.Entity("Aperture.Entities.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -84,6 +43,9 @@ namespace Aperture.Entities.Migrations
                     b.Property<DateTimeOffset>("DateCreated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<DateTimeOffset>("DateUploaded")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("ExposureSummary")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -99,20 +61,25 @@ namespace Aperture.Entities.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
+                    b.Property<string>("IconUrl")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
                     b.Property<string>("LargeUrl")
                         .IsRequired()
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
                     b.Property<string>("Orientation")
                         .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("SmallUrl")
                         .IsRequired()
@@ -124,12 +91,57 @@ namespace Aperture.Entities.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.HasKey("Id")
                         .HasName("PK_Photos");
 
                     SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"));
 
+                    b.HasIndex("Slug")
+                        .IsUnique()
+                        .HasDatabaseName("UK_Photo_Slug");
+
                     b.ToTable("Photos");
+                });
+
+            modelBuilder.Entity("Aperture.Entities.Property", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<int?>("PhotoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tag")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_Properties");
+
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"));
+
+                    b.HasIndex("PhotoId");
+
+                    b.ToTable("Properties");
                 });
 
             modelBuilder.Entity("Aperture.Entities.Tag", b =>
@@ -161,10 +173,10 @@ namespace Aperture.Entities.Migrations
                     b.ToTable("PhotoTag");
                 });
 
-            modelBuilder.Entity("Aperture.Entities.ExifProperty", b =>
+            modelBuilder.Entity("Aperture.Entities.Property", b =>
                 {
                     b.HasOne("Aperture.Entities.Photo", null)
-                        .WithMany("ExifProperties")
+                        .WithMany("Metadata")
                         .HasForeignKey("PhotoId");
                 });
 
@@ -185,7 +197,7 @@ namespace Aperture.Entities.Migrations
 
             modelBuilder.Entity("Aperture.Entities.Photo", b =>
                 {
-                    b.Navigation("ExifProperties");
+                    b.Navigation("Metadata");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,18 +2,18 @@
 
 namespace Aperture.Entities;
 
-public class Photo
+public class Photo: IEntity
 {
-    private static readonly Uri DefaultUri = new ("/", UriKind.Relative);
-    private string _name = string.Empty;
+    public static readonly Uri DefaultUri = new ("/", UriKind.Relative);
+    private string _title = string.Empty;
     private string _caption = string.Empty;
 
     public int Id { get; set; } = 0;
-
-    public string Name
+    public string Slug { get; set; } = string.Empty;
+    public string Title
     {
-        get => (string.IsNullOrWhiteSpace(_name)) ? FileName : _name;
-        set => _name = value;
+        get => (string.IsNullOrWhiteSpace(_title)) ? FileName : _title;
+        set => _title = value;
     }
     public string FileName { get; set; } = string.Empty;
 
@@ -28,11 +28,13 @@ public class Photo
     public Uri LargeUrl { get; set; } = DefaultUri;
     public Uri SmallUrl { get; set; } = DefaultUri;
     public Uri ThumbnailUrl { get; set; } = DefaultUri;
+    public Uri IconUrl { get; set; } = DefaultUri;
 
     public Orientation Orientation { get; set; } = Orientation.Landscape;
     public string ContentType { get; set; } = string.Empty;
     public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.MinValue;
+    public DateTimeOffset DateUploaded { get; set; } = DateTimeOffset.MinValue;
 
-    public List<ExifProperty>? ExifProperties { get; set; }
+    public List<Property>? Metadata { get; set; }
     public List<Tag>? Tags { get; set; }
 }

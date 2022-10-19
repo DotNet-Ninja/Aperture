@@ -1,0 +1,81 @@
+﻿@model NewPhoto
+@{
+    ViewData[ViewKey.Title] = "Add Photo";
+}
+
+<div class="row mb-2">
+    <h2>Library > Add Photo</h2>
+</div>
+<form id="add-photo-form" asp-controller="Library" asp-action="Add" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <input type="file" asp-for="File" class="form-control"/>
+            <span asp-validation-for="File" class="text-danger m-3"></span>
+        </div>
+        <div class="col-md-8 offset-md-2 mb-3 photo">
+            <upload-preview for="File" className="img-fluid" stylesheet="/lib/bootstrap/css/bootstrap.min.css" />
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input type="text" asp-for="Title" class="form-control"/>
+            <span asp-validation-for="Title" class="text-danger m-3"></span>
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="Slug" class="form-label"></label>
+            <input type="text" asp-for="Slug" class="form-control"/>
+            <span asp-validation-for="Slug" class="text-danger m-3"></span>
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="Caption" class="form-label"></label>
+            <input type="text" asp-for="Caption" class="form-control"/>
+            <span asp-validation-for="Caption" class="text-danger m-3"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-danger" asp-validation-summary="All"></div>
+    </div>
+    <div class="row">
+        <div class="col-12 d-flex justify-content-end mt-3">
+            <a asp-controller="Library" asp-action="Index" class="btn btn-secondary m-1">Cancel</a>
+            <button type="submit" class="btn btn-primary m-1">Save</button>
+        </div>
+    </div>
+</form>
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <script language="javascript" type="text/javascript" src="/js/components/UploadPreview.js"></script>
+    <script type="text/javascript" language="javascript">
+        (function() {
+            $("#File").focus();
+            $("#Title").blur(function() {
+                var slug = $("#Slug");
+                if (!slug.val() || slug.val().trim().length === 0) {
+                    var result = '';
+                    var lastChar = '';
+                    var allowed = 'abcdefghijklmnopqrstuvwxyz0123456789';
+                    var chars = $("#Title").val().toLowerCase().split('');
+                    for (var index = 0; index < chars.length; index++) {
+                        var char = chars[index];
+                        if (allowed.includes(char)) {
+                            result += char;
+                        }
+                        if (char === ' ' || char === '_' || char === '-') {
+                            if (lastChar !== '-' && result.length > 0) {
+                                result += '-';
+                            }
+                            lastChar = '-';
+                        } else {
+                            lastChar = char;
+                        }
+                    }
+                    if (result.substring(result.length - 1, result.length) === '-') {
+                        result = result.substring(0, result.length-1);
+                    }
+                    slug.val(result);
+                }
+            });
+        })();
+    </script>
+}
+
