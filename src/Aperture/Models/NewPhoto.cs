@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Aperture.Models;
 
@@ -15,5 +16,6 @@ public class NewPhoto
     public string? Caption { get; set; } = string.Empty;
 
     [Required]
+    [DisplayName("Photo File")]
     public IFormFile? File { get; set; }
 }

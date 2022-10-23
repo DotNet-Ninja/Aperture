@@ -110,6 +110,39 @@ public class PhotoService : IPhotoService
         return entity;
     }
 
+    public Task<Photo?> GetPhotoAsync(string slug)
+    {
+        var photo = _db.Photos.Include(p=>p.Tags).Include(p=>p.Metadata)
+            .SingleOrDefaultAsync(p=>p.Slug==slug);
+        return photo;
+    }
+
+    public async Task UpdatePhotoAsync(UpdatePhoto photoModel)
+    {
+        var entity = await _db.Photos.Include(p=>p.Tags).SingleOrDefaultAsync(p=>p.Id==photoModel.Id);
+        var tags = await _db.Tags.ToListAsync();
+
+        if (entity == null)
+        {
+            throw new ArgumentException();
+        }
+
+        photoModel.UpdateEntity(entity);
+
+        await _db.SaveChangesAsync();
+    }
+
+    public Task<List<Property>> GetMetadataAsync(int photoId)
+    {
+        return _db.Properties.Where(p => p.PhotoId == photoId).ToListAsync();
+    }
+
+    public Task<List<Tag>> GetAllTagsAsync()
+    {
+        var tags = _db.Tags.OrderBy(t => t.Name).ToListAsync();
+        return tags;
+    }
+
     private async Task<Uri> SaveScaledPhotoFileAsync(Image image, PhotoSize size, string slug, string contentType, string fileName)
     {
         var orientation = image.GetOrientation();
@@ -216,6 +249,3 @@ public class PhotoService : IPhotoService
         return builder.ToString().Trim();
     }
 }
-
-
-// TODO: ExposureSummary

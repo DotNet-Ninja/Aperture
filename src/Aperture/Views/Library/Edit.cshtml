@@ -1,0 +1,80 @@
+﻿@model UpdatePhotoModel
+@{
+    ViewData[ViewKey.Title] = "Edit Photo";
+}
+
+<form asp-controller="Library" asp-action="Edit" method="post">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input type="text" asp-for="Title" class="form-control"/>
+            <span asp-validation-for="Title" class="text-danger m-3"></span>
+        </div>
+        <div class="col-md-6 offset-md-3 mb-3">
+            <img src="@Model.LargeUrl" alt="@Model.Title" title="@Model.Title" class="img-fluid photo"/>
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="Slug" class="form-label"></label>
+            <input type="text" asp-for="Slug" class="form-control"/>
+            <span asp-validation-for="Slug" class="text-danger m-3"></span>
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="Caption" class="form-label"></label>
+            <input type="text" asp-for="Caption" class="form-control"/>
+            <span asp-validation-for="Caption" class="text-danger m-3"></span>
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="ExposureSummary" class="form-label"></label>
+            <input type="text" asp-for="ExposureSummary" class="form-control"/>
+            <span asp-validation-for="ExposureSummary" class="text-danger m-3"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-danger" asp-validation-summary="All"></div>
+    </div>
+    <div class="row">
+        <div class="col-12 d-flex justify-content-end mt-3">
+            <a asp-controller="Library" asp-action="Index" class="btn btn-secondary m-1">Cancel</a>
+            <button type="submit" class="btn btn-primary m-1">Save</button>
+        </div>
+    </div>
+    <input type="hidden" name="Id" Id="Id" value="@Model.Id"/>
+    <input type="hidden" asp-for="FileName"/>
+    <input type="hidden" asp-for="FullUrl"/>
+    <input type="hidden" asp-for="LargeUrl"/>
+    <input type="hidden" asp-for="Orientation"/>
+    <input type="hidden" asp-for="ContentType"/>
+    <input type="hidden" asp-for="DateCreated"/>
+    <input type="hidden" asp-for="DateUploaded"/>
+    <input type="hidden" asp-for="Tags"/>
+</form>
+<div class="row">
+    <div class="col-lg-6 col-12">
+        @if (Model.Metadata.Any())
+        {
+            <h2>Photo Metadata (Exif)</h2>
+            <table class="table text-bg-dark">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var property in @Model.Metadata)
+                    {
+                        <tr>
+                            <td>@property.Name</td>
+                            <td>@property.Value</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <span class="text-warning">No Photo Metadata Found</span>
+        }
+    </div>
+</div>
+

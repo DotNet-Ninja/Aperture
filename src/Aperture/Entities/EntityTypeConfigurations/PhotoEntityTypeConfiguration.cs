@@ -28,7 +28,7 @@ public class PhotoEntityTypeConfiguration: IEntityTypeConfiguration<Photo>
         builder.Property(e => e.ThumbnailUrl).IsRequired().HasMaxLength(2048).HasConversion<UriToStringConverter>();
         builder.Property(e => e.IconUrl).IsRequired().HasMaxLength(2048).HasConversion<UriToStringConverter>();
 
-        builder.HasMany(entity => entity.Metadata).WithOne();
+        builder.HasMany(entity => entity.Metadata).WithOne().HasForeignKey(p=>p.PhotoId);
         builder.HasMany(entity => entity.Tags).WithMany(entity => entity.Photos);
     }
 }

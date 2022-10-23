@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "wwwroot/js/components/ImagePreview.min.js",
+    "inputFiles": [
+      "wwwroot/js/components/ImagePreview.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/components/TagBuilder.min.js",
+    "inputFiles": [
+      "wwwroot/js/components/TagBuilder.js"
+    ]
+  }
+]

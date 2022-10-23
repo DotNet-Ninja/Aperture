@@ -5,6 +5,7 @@ using Aperture.Models;
 using Aperture.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SixLabors.ImageSharp;
 
 namespace Aperture.Controllers;
@@ -59,13 +60,44 @@ public class LibraryController : MvcController
         {
             Logger.LogWarning(sx, $"Error saving image.");
             ModelState.AddModelError("ExceptionMessage", "An error occurred saving your photo. See logs for more details.");
-            return View(model);
         }
         catch (PhotoExistsException dx)
         {
             Logger.LogError(dx, "Error adding photo.");
             ModelState.AddModelError("ExceptionMessage", $"A photo with the slug '{model.Slug}' already exists.");
+        }
+        return View(model);
+    }
+
+    [HttpGet]
+    public async Task<ViewResult> Edit([FromRoute] string id)
+    {
+        var slug = id;
+        var photo = await _service.GetPhotoAsync(slug);
+
+        if (photo == null)
+        {
+            return NotFoundView();
+        }
+
+        var tags = await _service.GetAllTagsAsync();
+
+        var model = UpdatePhotoModel.FromEntity(photo);
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(UpdatePhotoModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            model.Metadata = await _service.GetMetadataAsync(model.Id);
             return View(model);
         }
+
+        //var existing = await _service.GetPhotoAsync(model.Id);
+        
+        return View(model);
     }
 }

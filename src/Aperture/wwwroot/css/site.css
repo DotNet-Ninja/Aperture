@@ -79,3 +79,8 @@ body {
 .card-button:hover {
   filter: brightness(125%);
 }
+
+.photo {
+  border: solid 12px white;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.75);
+}

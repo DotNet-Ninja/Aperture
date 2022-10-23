@@ -9,16 +9,17 @@
 <form id="add-photo-form" asp-controller="Library" asp-action="Add" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="col-12 mb-3">
-            <input type="file" asp-for="File" class="form-control"/>
-            <span asp-validation-for="File" class="text-danger m-3"></span>
-        </div>
-        <div class="col-md-8 offset-md-2 mb-3 photo">
-            <upload-preview for="File" className="img-fluid" stylesheet="/lib/bootstrap/css/bootstrap.min.css" />
-        </div>
-        <div class="col-12 mb-3">
             <label asp-for="Title" class="form-label"></label>
             <input type="text" asp-for="Title" class="form-control"/>
             <span asp-validation-for="Title" class="text-danger m-3"></span>
+        </div>
+        <div class="col-12 mb-3">
+            <label asp-for="File" class="form-label"></label>
+            <input type="file" asp-for="File" class="form-control"/>
+            <span asp-validation-for="File" class="text-danger m-3"></span>
+        </div>
+        <div class="col-md-8 offset-md-2 mb-3">
+            <image-preview for="File" data-class="img-fluid photo" />
         </div>
         <div class="col-12 mb-3">
             <label asp-for="Slug" class="form-label"></label>
@@ -44,7 +45,7 @@
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial"/>
-    <script language="javascript" type="text/javascript" src="/js/components/UploadPreview.js"></script>
+    <script language="javascript" type="text/javascript" src="/js/components/ImagePreview.js"></script>
     <script type="text/javascript" language="javascript">
         (function() {
             $("#File").focus();

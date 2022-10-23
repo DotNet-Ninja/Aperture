@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+    <Content Remove="wwwroot\js\components\ImagePreview.js" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.0.4" />
 	  <PackageReference Include="Azure.Storage.Blobs" Version="12.13.1" />
 	  <PackageReference Include="DotNetNinja.AutoBoundConfiguration" Version="1.2.0" />
@@ -38,6 +43,12 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Shared\Components\PreviousNextPager\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\components\ImagePreview.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
+    <None Include="wwwroot\js\components\ImagePreview.js" />
   </ItemGroup>
 
 </Project>
