@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
         return services
             .AddHttpContextAccessor()
             .AddTransient<ISignInService, SignInService>()
+            .AddSingleton<IThemeService, ThemeService>()
         //.AddScoped<IDbMigrator<ApertureDb>, SqlDbMigrator<ApertureDb>>()
             .AddSingleton<ITimeProvider, SystemTimeProvider>();
     }

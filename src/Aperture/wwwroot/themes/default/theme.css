@@ -1,0 +1,10 @@
+﻿main {
+  min-height: 400px;
+}
+body{
+  margin-top: 75px;
+}
+
+.navbar {
+  border-bottom: solid 3px #009933;
+}

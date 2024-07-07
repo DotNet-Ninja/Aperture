@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Aperture.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Aperture.Models;
 
@@ -8,13 +9,14 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, ThemeSettings themes)
     {
         _logger = logger;
     }
 
     public IActionResult Index()
     {
+        
         return View();
     }
 

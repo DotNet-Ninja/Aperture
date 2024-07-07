@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\themes\" />
+    <Folder Include="Entities\" />
   </ItemGroup>
 
 </Project>
