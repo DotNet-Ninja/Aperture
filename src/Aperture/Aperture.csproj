@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>29e5ec36-06a4-4b24-af2a-0ad96ceed288</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.0.4" />
+    <PackageReference Include="DotNetNinja.AutoBoundConfiguration" Version="1.2.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.5" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+  </ItemGroup>
+
+</Project>
