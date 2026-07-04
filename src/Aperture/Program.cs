@@ -1,7 +1,14 @@
+using Aperture.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
+var config = builder.AddAutoBoundConfiguration();
+
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().WithContext();
+
+builder.Services.AddApplicationServices();
+builder.Services.AddAuth0Authentication(config.AuthSettings);
 
 var app = builder.Build();
 

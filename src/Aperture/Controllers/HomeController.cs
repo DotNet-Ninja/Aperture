@@ -1,17 +1,14 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Aperture.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aperture.Controllers;
 
 public class HomeController : Controller
 {
+    [AllowAnonymous]
     public IActionResult Index()
-    {
-        return View();
-    }
-
-    public IActionResult Privacy()
     {
         return View();
     }

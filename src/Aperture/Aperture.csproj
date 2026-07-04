@@ -1,13 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>bb9558d5-5574-4f9b-91af-25c953995845</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.8.0" />
+    <PackageReference Include="Auth0.Core" Version="7.47.0" />
     <PackageReference Include="DotNetNinja.AutoBoundConfiguration" Version="1.2.0" />
+    <PackageReference Include="Humanizer" Version="3.0.10" />
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="3.0.71" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

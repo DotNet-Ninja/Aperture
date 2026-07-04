@@ -1,0 +1,66 @@
+﻿@model List<NavigationItemModel>
+
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white box-shadow mb-3 fixed-top">
+    <div class="container">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+            <brand/>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                @foreach (var item in Model)
+                {
+                    if (item.Children.Any())
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @item.Text
+                            </a>
+                            <ul class="dropdown-menu">
+                                @foreach (var child in item.Children)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@child.TargetUrl">@child.Text</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="@item.TargetUrl">@item.Text</a>
+                        </li>
+                    }
+                }
+
+                <li class="nav-item dropdown ms-sm-auto">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <icon value="Person" /> <user-name anonymous="" />
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li is-authenticated="true" is-development="true">
+                            <a class="dropdown-item" asp-controller="Account" asp-action="Diagnostics">
+                                <icon value="Speedometer"/> Diagnostics
+                            </a>
+                        </li>
+                        <li is-authenticated="false">
+                            <a class="dropdown-item" asp-controller="Account" asp-action="LogIn">
+                                <icon value="BoxArrowInRight"/> Sign In
+                            </a>
+                        </li>
+                        <li is-authenticated="true">
+                            <a class="dropdown-item" asp-controller="Account" asp-action="LogOut">
+                                <icon value="BoxArrowRight"/> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
