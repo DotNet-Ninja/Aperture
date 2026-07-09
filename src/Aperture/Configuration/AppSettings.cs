@@ -10,4 +10,5 @@ public class AppSettings
     public string SiteLogoImageUrl { get; set; } = string.Empty;
     public string CopyrightOwner { get; set; } = string.Empty;
     public BootstrapIcon BrandIcon { get; set; } = BootstrapIcon.NotSet;
+    public string MigrationsPasskey { get; set; } = string.Empty;
 }

@@ -21,3 +21,19 @@ body{
 nav.navbar {
   border-bottom: 3px solid #0066ff!important;
 }
+
+.error-subhead {
+  font-size: .5em;
+  font-style: italic;
+  line-height: .7em;
+}
+
+.photo{
+  border: solid 6px #FFFFFF;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+}

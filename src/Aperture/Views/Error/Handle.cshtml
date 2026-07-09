@@ -1,0 +1,41 @@
+@model ErrorPageModel
+@{
+    ViewData[ViewKey.Title] = Model.Title;
+}
+
+<div class="container py-4">
+    <div class="row pb-3">
+        <div class="col">
+            <h1>
+                @Model.Title<br />
+                <small class="error-subhead">@Model.StatusCode - @Model.ErrorName</small>
+            </h1>
+        </div>
+    </div>
+    <div class="row pb-3">
+        <div class="col">
+            <img src="@Model.Image" alt="@Model.Title" class="d-block img-fluid photo mx-auto"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col pb-3">
+            <p>
+                @Model.Message
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            @foreach(var action in Model.Actions)
+            {
+                <a class="btn btn-@action.CssClass" href="@action.Url">
+                    @if(action.Icon != BootstrapIcon.NotSet)
+                    {
+                    <icon value="@action.Icon" />
+                    }
+                    @action.Text
+                </a>
+            }
+        </div>
+    </div>
+</div>

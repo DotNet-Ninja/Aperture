@@ -1,38 +1,22 @@
 ﻿using Aperture.Models;
+using Aperture.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aperture.ViewComponents;
 
 public class NavigationViewComponent: ViewComponent
 {
+    private readonly INavigationService _service;
+
+    public NavigationViewComponent(INavigationService service)
+    {
+        _service = service;
+    }
+
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var model = new List<NavigationItemModel>()
-        {
-            new NavigationItemModel()
-            {
-                TargetUrl = "/Home",
-                Text = "Home",
-                Children = new()
-                {
-                    new NavigationItemModel()
-                    {
-                        TargetUrl = "/Home/Test1",
-                        Text = "Test 1",
-                    },
-                    new NavigationItemModel()
-                    {
-                        TargetUrl = "/Home/Test2",
-                        Text = "Test 2",
-                    }
-                }
-            },
-            new NavigationItemModel()
-            {
-                TargetUrl = "/About",
-                Text = "About",
-            }
-        };
+        var items = await _service.GetMenuItemsAsync();
+        var model = items.Select(x => new NavigationItemModel(x)).ToList();
         return View(model);
     }
 }

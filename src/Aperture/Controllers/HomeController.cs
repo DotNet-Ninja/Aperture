@@ -1,21 +1,21 @@
-using System.Diagnostics;
+using Aperture.Services;
 using Microsoft.AspNetCore.Mvc;
-using Aperture.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Aperture.Controllers;
 
-public class HomeController : Controller
+public class HomeController : MvcController<HomeController>
 {
-    [AllowAnonymous]
-    public IActionResult Index()
+    private readonly INavigationService _navigationService;
+
+    public HomeController(IMvcContext<HomeController> context, INavigationService navigationService) : base(context)
     {
-        return View();
+        _navigationService = navigationService;
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    [AllowAnonymous]
+    public IActionResult Index([FromQuery] int? statusCode)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View();
     }
 }

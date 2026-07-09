@@ -1,0 +1,11 @@
+﻿-- Add Migration
+dotnet ef migrations add <name> -c ApertureDb -o Data\Migrations
+
+-- Remove latest Migration
+dotnet ef migrations remove
+
+-- Run Migrations
+dotnet ef database update
+
+-- Update tools
+dotnet tool update --global dotnet-ef
