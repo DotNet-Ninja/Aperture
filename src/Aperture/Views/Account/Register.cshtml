@@ -1,0 +1,86 @@
+﻿@model RegistrationModel
+@{
+    ViewData[ViewKey.Title] = "Register";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card bg-secondary-subtle border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-4 text-center">Create account</h1>
+
+                <form asp-controller="Account" asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="DisplayName" class="form-label"></label>
+                        <input asp-for="DisplayName" class="form-control" autocomplete="name" autofocus="autofocus" />
+                        <span asp-validation-for="DisplayName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" autocomplete="email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmEmail" class="form-label"></label>
+                        <input asp-for="ConfirmEmail" class="form-control" autocomplete="email" />
+                        <span asp-validation-for="ConfirmEmail" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" type="password" class="form-control" autocomplete="new-password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" autocomplete="new-password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    
+                    <div id='password-strength' class="mb-4"></div>
+
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/zxcvbn/dist/zxcvbn.js"></script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const passwordInput = document.getElementById("Password");
+        const strengthOutput = document.getElementById("password-strength");
+
+        passwordInput?.addEventListener("input", () => {
+            const result = zxcvbn(passwordInput.value);
+
+            const labels = [
+                "Very weak",
+                "Weak",
+                "Reasonable",
+                "Strong",
+                "Very strong"
+            ];
+            const classes = [
+                "text-danger",
+                "text-danger",
+                "text-secondary",
+                "text-primary",
+                "text-success"
+            ];
+            strengthOutput.classList.remove(...classes);
+            strengthOutput.classList.add(classes[result.score]);
+            strengthOutput.textContent = `Password strength: ${labels[result.score]}`;
+        });
+    });
+</script>
+}

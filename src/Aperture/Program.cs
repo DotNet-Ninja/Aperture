@@ -10,7 +10,7 @@ builder.Services.AddControllersWithViews().WithContext();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddDataContext<ApertureDb>(config.DbSettings);
-builder.Services.AddAuth0Authentication(config.AuthSettings);
+builder.Services.AddApplicationAuthentication(config.AuthSettings);
 
 var app = builder.Build();
 
@@ -27,6 +27,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

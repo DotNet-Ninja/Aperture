@@ -1,10 +1,13 @@
-﻿using Aperture.Constants;
+﻿using System.Text;
+using Aperture.Constants;
 using Aperture.Controllers;
 using Aperture.Data;
 using Aperture.Services;
-using Auth0.AspNetCore.Authentication;
 using DotNetNinja.AutoBoundConfiguration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Aperture.Configuration;
 
@@ -18,15 +21,19 @@ public static class StartUpExtensions
         services.AddSingleton<IErrorPageService, ErrorPageService>();
         services.AddScoped<IRepository, Repository>();
         services.AddScoped<INavigationService, NavigationService>();
+        services.AddSingleton<ITokenService, TokenService>();
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>();
+        services.AddScoped<IAvatarService, GravatarService>();
         return services;
     }
 
-    public static (Auth0Settings AuthSettings, AppSettings Settings, DatabaseSettings DbSettings) AddAutoBoundConfiguration(this WebApplicationBuilder builder)
+    public static (JwtOptions AuthSettings, AppSettings Settings, DatabaseSettings DbSettings) AddAutoBoundConfiguration(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<ISignInService, SignInService>();
         var provider = 
         builder.Services.AddAutoBoundConfigurations(builder.Configuration).FromAssemblyOf<AppSettings>().Provider;
-        return (provider.Get<Auth0Settings>(), provider.Get<AppSettings>(), provider.Get<DatabaseSettings>());
+        return (provider.Get<JwtOptions>(), provider.Get<AppSettings>(), provider.Get<DatabaseSettings>());
     }
 
     public static IServiceCollection WithContext(this IMvcBuilder builder)
@@ -36,14 +43,42 @@ public static class StartUpExtensions
         return builder.Services;
     }
 
-    public static IServiceCollection AddAuth0Authentication(this IServiceCollection services, Auth0Settings auth0)
+    public static IServiceCollection AddApplicationAuthentication(this IServiceCollection services, JwtOptions jwtOptions)
     {
-        services.AddAuth0WebAppAuthentication(options =>
-        {
-            options.Domain = auth0.Domain;
-            options.ClientId = auth0.ClientId;
-            options.ClientSecret = auth0.ClientSecret;
-        });
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (string.IsNullOrWhiteSpace(context.Token) &&
+                            context.Request.Cookies.TryGetValue(JwtCookie.Name, out var token))
+                        {
+                            context.Token = token;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtOptions.Issuer,
+
+                    ValidateAudience = true,
+                    ValidAudience = jwtOptions.Audience,
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtOptions.SigningKey)),
+
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(1)
+                };
+            });
         return services;
     }
 

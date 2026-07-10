@@ -4,26 +4,27 @@
 }
 
 <div class="container py-3">
-    <h1 class="h3 mb-3">Provider User Claims</h1>
+    
+    <h1 class="h3 mb-3"><avatar size="48" /> <user-name /></h1>
 
     @if (Model.Claims.Any())
     {
         <div class="table-responsive">
             <table class="table table-striped table-bordered align-middle">
                 <thead class="table-light">
-                    <tr>
-                        <th scope="col">Type</th>
-                        <th scope="col">Value</th>
-                    </tr>
+                <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col">Value</th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var claim in Model.Claims)
-                    {
-                        <tr>
-                            <td><code class="text-primary">@claim.Type</code></td>
-                            <td>@claim.Value</td>
-                        </tr>
-                    }
+                @foreach (var claim in Model.Claims)
+                {
+                    <tr>
+                        <td><code class="text-primary">@claim.Type</code></td>
+                        <td>@claim.Value</td>
+                    </tr>
+                }
                 </tbody>
             </table>
         </div>

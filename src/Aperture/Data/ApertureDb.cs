@@ -16,6 +16,10 @@ public class ApertureDb: DbContext
 
     public DbSet<MenuItem> MenuItems => Set<MenuItem>();
 
+    public DbSet<ApplicationUser> Users => Set<ApplicationUser>();
+
+    public DbSet<Role> Roles => Set<Role>();
+
     public async Task SeedDataAsync()
     {
         if (!MenuItems.Any())

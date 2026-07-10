@@ -14,5 +14,10 @@ public class MenuItemEntityTypeConfiguration: IEntityTypeConfiguration<MenuItem>
         builder.Property(m => m.SortIndex).IsRequired();
 
         builder.HasMany(m => m.Children).WithOne().HasForeignKey(m => m.ParentId);
+
+        builder.HasData([
+            new MenuItem { Id = 1, Text = "Posts", Href = "/Posts", OpensInNewTab = false, SortIndex = 1, ParentId = null },
+            new MenuItem { Id = 2, Text = "Galleries", Href = "/Galleries", OpensInNewTab = false, SortIndex = 2, ParentId = null }
+        ]);
     }   
 }

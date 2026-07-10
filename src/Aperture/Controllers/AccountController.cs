@@ -1,29 +1,71 @@
-﻿using Aperture.Services;
+﻿using Aperture.Constants;
 using Aperture.Models;
-using Auth0.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Aperture.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aperture.Controllers;
 
 public class AccountController : MvcController<AccountController>
 {
-    private readonly ISignInService _signInService;
+    private readonly IAccountService _accountService;
+    private readonly ITokenService _tokenService;
 
-    public AccountController(IMvcContext<AccountController> context, ISignInService signInService) : base(context)
+    public AccountController(IMvcContext<AccountController> context, IAccountService accountService, ITokenService tokenService) : base(context)
     {
-        _signInService = signInService;
+        _accountService = accountService;
+        _tokenService = tokenService;
     }
 
     [HttpGet, AllowAnonymous]
-    public async Task LogIn(string returnUrl = "/")
+    public IActionResult LogIn(string returnUrl = "/")
     {
-        var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
-            .WithRedirectUri(returnUrl)
-            .Build();
+        var model = new LoginModel();
 
-        await _signInService.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+        return View(model);
+    }
+
+    [HttpPost, AllowAnonymous]
+    public async Task<IActionResult> LogIn(LoginModel model, string returnUrl = "/")
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var result = await _accountService.AuthenticateAsync(model.Email, model.Password);
+        if (!result.IsAuthenticated)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return View(model);
+        }
+
+        return LoginAndRedirect(result, returnUrl);
+    }
+
+    [HttpGet, AllowAnonymous]
+    public IActionResult Register()
+    {
+        var model = new RegistrationModel();
+        return View(model);
+    }
+
+    [HttpPost, AllowAnonymous]
+    public async Task<IActionResult> Register(RegistrationModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var result = await _accountService.RegisterAsync(model.DisplayName, model.Email, model.Password);
+        if (!result.IsAuthenticated)
+        {
+            ModelState.AddModelError(string.Empty, "Registration failed. Please try again.");
+            return View(model);
+        }
+        return LoginAndRedirect(result, "/");
     }
 
     [HttpGet]
@@ -41,13 +83,32 @@ public class AccountController : MvcController<AccountController>
     }
 
     [HttpGet]
-    public async Task LogOut()
+    public IActionResult LogOut()
     {
-        var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
-            .WithRedirectUri("/")
-            .Build();
+        Response.Cookies.Delete(JwtCookie.Name);
 
-        await _signInService.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
-        await _signInService.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return RedirectToAction("Index", "Home");
+    }
+
+
+    private IActionResult LoginAndRedirect(AuthenticationResult result, string returnUrl)
+    {
+        var tokenData = _tokenService.CreateToken(result);
+
+        Response.Cookies.Append(JwtCookie.Name, tokenData.AccessToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = Request.IsHttps,
+            SameSite = SameSiteMode.Lax,
+            Expires = tokenData.ExpiresAt,
+            IsEssential = true
+        });
+
+        if (!Url.IsLocalUrl(returnUrl))
+        {
+            returnUrl = "/";
+        }
+
+        return Redirect(returnUrl);
     }
 }
