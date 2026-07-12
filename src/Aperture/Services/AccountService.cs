@@ -10,7 +10,6 @@ public class AccountService : IAccountService
     private readonly IRepository _repository;
     private readonly IPasswordHasher<ApplicationUser> _hasher;
     private readonly IAvatarService _avatars;
-    private readonly IPasswordValidator<ApplicationUser> _validator;
 
     public AccountService(IRepository repository, IPasswordHasher<ApplicationUser> hasher, IAvatarService avatars)
     {
@@ -54,5 +53,29 @@ public class AccountService : IAccountService
         };
         await _repository.AddUserAsync(user);
         return new AuthenticationResult(user);
+    }
+
+    public Task<ApplicationUser?> GetUserAsync(int id)
+    {
+        return _repository.GetUserByIdAsync(id);
+    }
+
+    public Task UpdateUserAsync(ApplicationUser user)
+    {
+        foreach(var role in user.Roles)
+        {
+            _repository.Attach(role);
+        }
+        return _repository.UpdateUserAsync(user);
+    }
+
+    public Task<List<Role>> GetRolesAsync()
+    {
+        return _repository.GetRolesAsync();
+    }
+
+    public Task<Page<ApplicationUser>> PageUsersAsync(int page, int size)
+    {
+        return _repository.PageUsersAsync(page, size);
     }
 }

@@ -37,3 +37,65 @@ h1, h2, h3, h4, h5, h6 {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
 }
+
+h1 a, h2 a, h3 a {
+  text-decoration: underline;
+}
+
+.admin-panel-link {
+  display: block;
+}
+
+.admin-panel-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-panel-card-body {
+  min-height: 170px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+  .admin-panel-card-body.users{
+    background-image: url('/images/UsersTile.jpg');
+  }
+
+  .admin-panel-card-body.posts {
+    background-image: url('/images/PostsTile.jpg');
+  }
+
+  .admin-panel-card-body.galleries {
+    background-image: url('/images/GalleriesTile.jpg');
+  }
+
+  .admin-panel-card-body.media {
+    background-image: url('/images/MediaTile.jpg');
+  }
+
+  .admin-panel-card-body.navigation {
+    background-image: url('/images/NavigationTile.jpg');
+  }
+
+  .admin-panel-card-body.general {
+    background-image: url('/images/GeneralTile.jpg');
+  }
+
+  .admin-panel-card-icon {
+    font-size: 2.25rem;
+    color: var(--bs-white);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
+  }
+
+.admin-panel-link:hover .admin-panel-card {
+  animation: panel-bounce 0.35s ease;
+  box-shadow: var(--bs-box-shadow) !important;
+}
+
+@keyframes panel-bounce {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(2px, 2px); }
+}

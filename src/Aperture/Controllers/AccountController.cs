@@ -2,7 +2,6 @@
 using Aperture.Models;
 using Aperture.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aperture.Controllers;

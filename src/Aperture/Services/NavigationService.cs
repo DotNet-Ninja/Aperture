@@ -1,4 +1,5 @@
-﻿using Aperture.Data;
+﻿using Aperture.Constants;
+using Aperture.Data;
 
 namespace Aperture.Services;
 
@@ -11,8 +12,12 @@ public class NavigationService : INavigationService
         _repository = repository;
     }
 
-    public async Task<List<MenuItem>> GetMenuItemsAsync()
+    public async Task<List<MenuItem>> GetMenuItemsAsync(MenuLocation location)
     {
+        if (location == MenuLocation.Admin)
+        {
+            return AdminMenu.Items;
+        }
         return await _repository.GetMenuItemsAsync();
     }
 

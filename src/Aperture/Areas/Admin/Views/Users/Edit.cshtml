@@ -1,0 +1,46 @@
+﻿@model UserEditModel
+@{
+    ViewData[ViewKey.Title] = "Edit User - " + Model.User.DisplayName;
+}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-6 mb-0">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index"><icon value="Gear"/></a><icon value="ChevronCompactRight" />
+            <a asp-area="Admin" asp-controller="Users" asp-action="Index"><icon value="People" /></a><icon value="ChevronCompactRight" />
+            @Model.User.DisplayName
+        </h1>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <form asp-area="Admin" asp-controller="Users" asp-action="Edit" method="post">
+            <input asp-for="User.Id" type="hidden" />
+            <input asp-for="User.AvatarId" type="hidden" />
+
+            <div class="mb-3">
+                <label asp-for="User.DisplayName" class="form-label"></label>
+                <input asp-for="User.DisplayName" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="User.Email" class="form-label"></label>
+                <input asp-for="User.Email" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Roles</label>
+                @foreach (var role in Model.AllRoles)
+                {
+                    var isChecked = Model.User.Roles.Contains(role);
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="User.Roles" id="role_@role" value="@role" checked="@isChecked" />
+                        <label class="form-check-label" for="role_@role">@role</label>
+                    </div>
+                }
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

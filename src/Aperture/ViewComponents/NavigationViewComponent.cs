@@ -1,4 +1,5 @@
-﻿using Aperture.Models;
+﻿using Aperture.Constants;
+using Aperture.Models;
 using Aperture.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +14,9 @@ public class NavigationViewComponent: ViewComponent
         _service = service;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync()
+    public async Task<IViewComponentResult> InvokeAsync(MenuLocation location)
     {
-        var items = await _service.GetMenuItemsAsync();
+        var items = await _service.GetMenuItemsAsync(location);
         var model = items.Select(x => new NavigationItemModel(x)).ToList();
         return View(model);
     }

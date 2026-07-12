@@ -1,0 +1,95 @@
+﻿@model Page<UserModel>
+@{
+    ViewData[ViewKey.Title] = "Users";
+}
+
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-6 mb-0">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index"><icon value="Gear"/></a><icon value="ChevronCompactRight" />
+            Users
+        </h1>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        @if (Model.Items.Any())
+        {
+            <ul class="list-group">
+                @foreach (var user in Model.Items)
+                {
+                    <a class="list-group-item list-group-item-action text-decoration-none"
+                       asp-area="Admin"
+                       asp-controller="Users"
+                       asp-action="Edit"
+                       asp-route-id="@user.Id">
+                        <div class="d-flex align-items-start gap-3">
+                            <avatar id="@user.AvatarId" size="48" />
+                            <div class="d-flex flex-column flex-grow-1">
+                                <div class="fw-bold">@user.DisplayName</div>
+                                <div class="text-muted">@user.Email</div>
+
+                                @if (user.Roles.Any())
+                                {
+                                    <div class="d-flex flex-wrap gap-1 justify-content-end mt-2">
+                                        @foreach (var role in user.Roles)
+                                        {
+                                            <span class="badge text-bg-secondary">@role</span>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </a>
+                }
+            </ul>
+        }
+        else
+        {
+            <p class="text-muted mb-0">No users were found.</p>
+        }
+
+        @if (Model.PageCount > 1)
+        {
+            <nav class="mt-3" aria-label="Users pagination">
+                <ul class="pagination mb-0 justify-content-center">
+                    <li class="page-item @(Model.CanGoBack ? string.Empty : "disabled")">
+                        <a class="page-link"
+                           asp-area="Admin"
+                           asp-controller="Users"
+                           asp-action="Index"
+                           asp-route-page="@(Model.Number - 1)"
+                           asp-route-size="@Model.Size"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    @for (var pageNumber = 1; pageNumber <= Model.PageCount; pageNumber++)
+                    {
+                        <li class="page-item @(pageNumber == Model.Number ? "active" : string.Empty)">
+                            <a class="page-link"
+                               asp-area="Admin"
+                               asp-controller="Users"
+                               asp-action="Index"
+                               asp-route-page="@pageNumber"
+                               asp-route-size="@Model.Size">@pageNumber</a>
+                        </li>
+                    }
+
+                    <li class="page-item @(Model.CanGoForward ? string.Empty : "disabled")">
+                        <a class="page-link"
+                           asp-area="Admin"
+                           asp-controller="Users"
+                           asp-action="Index"
+                           asp-route-page="@(Model.Number + 1)"
+                           asp-route-size="@Model.Size"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
+</div>

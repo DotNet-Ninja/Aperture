@@ -1,4 +1,5 @@
 ﻿using Aperture.Constants;
+using Aperture.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aperture.Data;
@@ -12,6 +13,7 @@ public class Repository : IRepository
         _db = db;
     }
 
+    // Menu
     public Task<List<MenuItem>> GetMenuItemsAsync()
     {
         return _db.MenuItems.Where(m => m.ParentId == null)
@@ -21,11 +23,19 @@ public class Repository : IRepository
                     .ToListAsync();
     }
 
+    // Users
     public Task<ApplicationUser?> GetUserByEmailAsync(string email)
     {
         return _db.Users.AsNoTracking()
                 .Include(u => u.Roles)
                 .SingleOrDefaultAsync(u => u.Email == email);
+    }
+
+    public Task<ApplicationUser?> GetUserByIdAsync(int id)
+    {
+        return _db.Users.AsNoTracking()
+            .Include(u => u.Roles)
+            .SingleOrDefaultAsync(u => u.Id == id);
     }
 
     public async Task<ApplicationUser> AddUserAsync(ApplicationUser user)
@@ -39,11 +49,28 @@ public class Repository : IRepository
         return user;
     }
 
+    public Task UpdateUserAsync(ApplicationUser user)
+    {
+        _db.Users.Update(user);
+        return _db.SaveChangesAsync();
+    }
+
+    public Task<List<Role>> GetRolesAsync()
+    {
+        return _db.Roles.AsNoTracking().ToListAsync();
+    }
+
     public Task<int> GetAdminCountAsync()
     {
         return _db.Users.CountAsync(u => u.Roles.Any(r => r.Name == AppRoles.Owner));
     }
 
+    public Task<Page<ApplicationUser>> PageUsersAsync(int page, int size)
+    {
+        return _db.Users.AsNoTracking().Include(u => u.Roles).OrderBy(o=>o.DisplayName).ToPageAsync(page, size);
+    }
+
+    // Helpers
     public IRepository Attach<TEntity>(TEntity entity) where TEntity : class
     {
         _db.Attach(entity);
@@ -61,7 +88,6 @@ public class Repository : IRepository
     {
         await _db.SeedDataAsync();
     }
-
 
     public async Task<List<MigrationStatus>> GetMigrationStatusAsync()
     {

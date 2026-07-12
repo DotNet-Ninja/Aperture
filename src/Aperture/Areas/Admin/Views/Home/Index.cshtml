@@ -1,0 +1,40 @@
+﻿@{
+    ViewData[ViewKey.Title] = "Admin Home";
+
+    var panels = new[]
+    {
+        new { Title = "Posts", Controller = "Posts", Icon = BootstrapIcon.FileEarmarkText },
+        new { Title = "Galleries", Controller = "Galleries", Icon = BootstrapIcon.Images },
+        new { Title = "Media", Controller = "Media", Icon = BootstrapIcon.Image },
+        new { Title = "Users", Controller = "Users", Icon = BootstrapIcon.People },
+        new { Title = "Navigation", Controller = "Navigation", Icon = BootstrapIcon.Diagram3 },
+        new { Title = "General", Controller = "General", Icon = BootstrapIcon.Sliders }
+    };
+}
+
+<div class="container py-3">
+    <div class="row">
+        <div class="col mb-4">
+            <h1 class="h3 mb-0">Control Panel</h1>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        @foreach (var panel in panels)
+        {
+            <div class="col-12 col-sm-6 col-lg-4">
+                <a asp-area="Admin"
+                   asp-controller="@panel.Controller"
+                   asp-action="Index"
+                   class="admin-panel-link text-decoration-none text-reset">
+                    <div class="card admin-panel-card h-100 shadow-sm border border-dark">
+                        <div class="card-header bg-primary text-white fw-semibold">@panel.Title</div>
+                        <div class="card-body admin-panel-card-body @panel.Title.ToLower()">
+                            <icon value="@panel.Icon" class="admin-panel-card-icon" />
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

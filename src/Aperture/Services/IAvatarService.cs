@@ -1,7 +1,4 @@
-﻿using Aperture.Configuration;
-using Aperture.Data;
-
-namespace Aperture.Services;
+﻿namespace Aperture.Services;
 
 public interface IAvatarService
 {
